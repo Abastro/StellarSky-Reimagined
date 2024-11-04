@@ -14,7 +14,7 @@ public record SystemBody(Optional<CoordFrame> frame, Visual visual) {
     }
 
     // public static final Codec<SystemBody> CODEC = RecordCodecBuilder.create(instance -> {
-    //     instance.group(
+    //     return instance.group(
             
     //     ).apply(instance, SystemBody::new);
     // });
