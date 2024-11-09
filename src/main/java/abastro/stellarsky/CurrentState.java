@@ -2,8 +2,7 @@ package abastro.stellarsky;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
+import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import com.mojang.datafixers.util.Pair;
@@ -29,27 +28,34 @@ public class CurrentState {
 
     public void updatePositions(SolarSystem system, int tick) {
         var basePos = new Vector3d(0, 0, 0);
-        var curTickYr = tick / Constants.YEAR_IN_TICK;
-        var nextTickYr = (tick + 1) / Constants.YEAR_IN_TICK;
+        var curSec = tick / Constants.SECOND_IN_TICK;
+        // Next tick in seconds
+        var nextSec = (tick + 1) / Constants.SECOND_IN_TICK;
         for (var planet : system.planets) {
-            updatePosFor(planet, system.rootMassFactor, curTickYr, nextTickYr, Pair.of(basePos, basePos));
+            updatePosFor(planet, system.rootMassFactor, curSec, nextSec, Pair.of(basePos, basePos));
         }
     }
 
-    private void updatePosFor(SolarSystem.Entry entry, float parentMass, float curTickYr, float nextTickYr,
+    private void updatePosFor(SolarSystem.Entry entry, float parentMass, float curSec, float nextSec,
             Pair<Vector3dc, Vector3dc> parentPos) {
-        Vector3dc curPos = entry.orbit().positionAtYear(parentMass, curTickYr).add(parentPos.getFirst());
-        Vector3dc nextPos = entry.orbit().positionAtYear(parentMass, nextTickYr).add(parentPos.getSecond());
+        Vector3dc curPos = entry.orbit().positionAtYear(parentMass, curSec / Constants.YEAR_IN_SEC)
+                .add(parentPos.getFirst());
+        Vector3dc nextPos = entry.orbit().positionAtYear(parentMass, nextSec / Constants.YEAR_IN_SEC)
+                .add(parentPos.getSecond());
         var posPair = Pair.of(curPos, nextPos);
 
         var body = bodyRegistry.get(entry.body());
-        // TODO How to update coordinates?
-        positions.put(entry.body(), new Positioning(posPair, Optional.empty()));
+        var optCoord = body.frame().map(frame -> {
+            Matrix3dc curCoord = frame.fromEcliptic(curSec);
+            Matrix3dc nextCoord = frame.fromEcliptic(nextSec);
+            return Pair.of(curCoord, nextCoord);
+        });
+        positions.put(entry.body(), new Positioning(posPair, optCoord));
 
         switch (entry.node()) {
             case SolarSystem.Parent(var mass, var children):
                 for (var child : children)
-                    updatePosFor(child, mass, curTickYr, nextTickYr, posPair);
+                    updatePosFor(child, mass, curSec, nextSec, posPair);
                 break;
             case SolarSystem.Leaf():
                 break;

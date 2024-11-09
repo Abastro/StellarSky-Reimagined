@@ -26,6 +26,11 @@ public interface CoordFrame {
             .apply(instance, Rotating::new));
 
     // TODO Check out if this is appropriate
-    public static record Rotating(float axialTilt, float poleLongitude, float rotationPeriod) {
+    public static record Rotating(float axialTilt, float poleLongitude, float rotationPeriod) implements CoordFrame {
+        @Override
+        public Matrix3d fromEcliptic(float seconds) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'fromEcliptic'");
+        }
     }
 }
