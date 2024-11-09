@@ -68,8 +68,4 @@ public record Orbit(
             Codec.FLOAT.fieldOf("longitude-periapsis").forGetter(Orbit::longPeri),
             Codec.FLOAT.fieldOf("mean-longitude").forGetter(Orbit::meanLong))
             .apply(instance, Orbit::new));
-
-    public static final float YEAR_IN_DAY = 365.25f;
-    public static final float DAY_IN_TICK = 24000f;
-    public static final float AU_IN_KM = 1.5e8f;
 }

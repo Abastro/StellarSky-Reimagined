@@ -29,8 +29,7 @@ public class StellarSky {
 
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        // TODO Fill in the null with CODECs
-        event.dataPackRegistry(SYSTEM_BODY_REGISTRY_KEY, null, null);
+        event.dataPackRegistry(SYSTEM_BODY_REGISTRY_KEY, SystemBody.CODEC, SystemBody.CODEC);
     }
 
     @SubscribeEvent

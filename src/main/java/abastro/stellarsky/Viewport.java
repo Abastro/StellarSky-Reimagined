@@ -1,5 +1,7 @@
 package abastro.stellarsky;
 
-public record Viewport(int bodyID, float longitude, float latitude) {
+import net.minecraft.resources.ResourceLocation;
+
+public record Viewport(ResourceLocation body, float longitude, float latitude) {
     
 }
