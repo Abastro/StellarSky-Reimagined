@@ -19,11 +19,6 @@ public interface CoordFrame {
         }
     }
 
-    public static enum StoredFrameType {
-        ROTATING,
-        TIDAL_LOCKED;
-    }
-
     public static final Codec<Rotating> ROTATING_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.FLOAT.fieldOf("axial-tilt").forGetter(Rotating::axialTilt),
             Codec.FLOAT.fieldOf("pole-longitude").forGetter(Rotating::poleLongitude),
@@ -32,8 +27,5 @@ public interface CoordFrame {
 
     // TODO Check out if this is appropriate
     public static record Rotating(float axialTilt, float poleLongitude, float rotationPeriod) {
-    }
-
-    public static record TidalLocked() {
     }
 }
