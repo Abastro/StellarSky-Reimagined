@@ -19,6 +19,17 @@ public interface CoordFrame {
         }
     }
 
+    public static class Equatorial implements CoordFrame {
+        @Override
+        public Matrix3d fromEcliptic(float seconds) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'fromEcliptic'");
+        }
+    }
+
+    public static final CoordFrame ECLIPTIC = new Ecliptic();
+    public static final CoordFrame EQUATORIAL = new Equatorial();
+
     public static final Codec<Rotating> ROTATING_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.FLOAT.fieldOf("axial-tilt").forGetter(Rotating::axialTilt),
             Codec.FLOAT.fieldOf("pole-longitude").forGetter(Rotating::poleLongitude),

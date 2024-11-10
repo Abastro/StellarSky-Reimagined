@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Denotes a solar system, especially its orbital properties.
  */
-public class SolarSystem {
-    public float rootMassFactor;
-    public ResourceLocation rootBody;
-    public List<Entry> planets;
+public record SolarSystem(float rootMassFactor, ResourceLocation rootBody, List<Entry> planets) {
+    // public float rootMassFactor;
+    // public ResourceLocation rootBody;
+    // public List<Entry> planets;
 
     /**
      * Denotes location of a body in the system.
@@ -57,7 +57,14 @@ public class SolarSystem {
                 return RecordCodecBuilder.create(instEntry -> instEntry.group(
                         Orbit.CODEC.fieldOf("orbit").forGetter(Entry::orbit),
                         ResourceLocation.CODEC.fieldOf("body").forGetter(Entry::body),
+                        // TODO Do not introduce nesting here
                         nodeCodec.fieldOf("node").forGetter(Entry::node))
                         .apply(instEntry, Entry::new));
             });
+
+    public static final Codec<SolarSystem> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.FLOAT.fieldOf("mass-factor").forGetter(SolarSystem::rootMassFactor),
+            ResourceLocation.CODEC.fieldOf("body").forGetter(SolarSystem::rootBody),
+            ENTRY_CODEC.listOf().fieldOf("children").forGetter(SolarSystem::planets))
+            .apply(instance, SolarSystem::new));
 }

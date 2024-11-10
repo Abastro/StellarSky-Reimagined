@@ -1,5 +1,6 @@
 package abastro.stellarsky;
 
+import abastro.stellarsky.system.SolarSystem;
 import abastro.stellarsky.system.SystemBody;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -21,6 +22,8 @@ public class StellarSky {
 
     public static final ResourceKey<Registry<SystemBody>> SYSTEM_BODY_REGISTRY_KEY = ResourceKey
             .createRegistryKey(ResourceLocation.fromNamespaceAndPath(MODID, "system-body"));
+    public static final ResourceKey<Registry<SolarSystem>> SOLAR_SYSTEM_REGISTRY_KEY = ResourceKey
+            .createRegistryKey(ResourceLocation.fromNamespaceAndPath(MODID, "solar-system"));
 
     public StellarSky(IEventBus modEventBus, ModContainer modContainer) {
         NeoForge.EVENT_BUS.register(this);
@@ -30,6 +33,7 @@ public class StellarSky {
     @SubscribeEvent
     public static void registerDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(SYSTEM_BODY_REGISTRY_KEY, SystemBody.CODEC, SystemBody.CODEC);
+        event.dataPackRegistry(SOLAR_SYSTEM_REGISTRY_KEY, SolarSystem.CODEC, SolarSystem.CODEC);
     }
 
     @SubscribeEvent

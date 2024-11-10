@@ -31,8 +31,8 @@ public class CurrentState {
         var curSec = tick / Constants.SECOND_IN_TICK;
         // Next tick in seconds
         var nextSec = (tick + 1) / Constants.SECOND_IN_TICK;
-        for (var planet : system.planets) {
-            updatePosFor(planet, system.rootMassFactor, curSec, nextSec, Pair.of(basePos, basePos));
+        for (var planet : system.planets()) {
+            updatePosFor(planet, system.rootMassFactor(), curSec, nextSec, Pair.of(basePos, basePos));
         }
     }
 
